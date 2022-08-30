@@ -1,8 +1,9 @@
 {
+  "type" :"module",
  
   "scripts": {
  
-   
+  
   "server": "nodemon js/server.js"
  
   },
