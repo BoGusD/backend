@@ -1,31 +1,36 @@
 // @ts-check
 
-// const { query } = require('express');
 const express = require('express');
 
 const app = express();
-
 const PORT = 4000;
-// const fs = require('fs');
 
-const userRouter = express.Router();
+const userRouter = require('./routes/users');
+
 const postsRouter = express.Router();
+
+// view engine 세팅
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 app.use('/users', userRouter);
 app.use('/posts', postsRouter);
 
-userRouter.get('/:name', (req, res) => {
-  res.send('회원 목록');
+app.use(express.static('public'));
+
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+  res.status(err.statusCode);
+  res.end(err.message);
 });
-postsRouter.get('/:title', (req, res) => {
-  res.send('블로그 글 목록');
-});
-postsRouter.post('/', (req, res) => {
-  res.send(`제목이 ${req.params.title} 인 글이 등록 되었습니다.`);
-});
-userRouter.post('/', (req, res) => {
-  res.send(`이름이 ${req.params.name} 인 유저가 등록 되었습니다.`);
-});
+
+// postsRouter.get('/', (req, res) => {
+//   res.send('블로그 글 목록');
+// });
+
+// postsRouter.post('/:title', (req, res) => {
+//   res.send(`제목이 ${req.params.title} 인 글이 등록 되었습니다.`);
+// });
 
 // app.get('/', (req, res) => {
 //   res.send('GET request');
