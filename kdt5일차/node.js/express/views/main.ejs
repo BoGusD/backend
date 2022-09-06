@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>homework</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <script src="./js/test.js"></script>
+</head>
+
+<body>
+  <h1>글 조회</h1>
+  <h2>글 전체 조회 <%= pageCounts %>
+  </h2>
+  <ul>
+    <% if(pageCounts >0) { %>
+    <% for (let i =0; i< pageCounts; i++) { %>}
+
+    <li>
+      <p>id: <%= POST[i].id %></p>
+      <p>title: <%= POST[i].title %></p>
+      <p>content: <%= POST[i].content %></p>
+    </li>
+
+    <% } %>
+    <% } else  { %>
+    <li>
+      해당 게시물을 찾을수가 없습니다.
+    </li>
+    <% } %>
+  </ul>
+  <img src="./images/<%= imageName %>" alt="fff" />
+
+</body>
+
+</html>
