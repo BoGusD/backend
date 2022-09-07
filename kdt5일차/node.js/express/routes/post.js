@@ -34,18 +34,34 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  if (req.query.id && req.query.title && req.query.content) {
-    const newPost = {
-      id: req.query.id,
-      title: req.query.title,
-      content: req.query.content,
-    };
-    POST.push(newPost);
-    res.send('새로운 글 등록 완료');
-  } else {
-    const err = new Error('POST not found');
-    err.statusCode = 404;
-    throw err;
+  if (Object.keys(req.query).length >= 1) {
+    if (req.query.id && req.query.title && req.query.content) {
+      const newPost = {
+        id: req.query.id,
+        title: req.query.title,
+        content: req.query.content,
+      };
+      POST.push(newPost);
+      res.redirect('/post');
+    } else {
+      const err = new Error('POST not found');
+      err.statusCode = 404;
+      throw err;
+    }
+  } else if (req.body) {
+    if (req.body.id && req.body.title && req.body.content) {
+      const newPost = {
+        id: req.body.id,
+        title: req.body.title,
+        content: req.body.content,
+      };
+      POST.push(newPost);
+      res.redirect('/post');
+    } else {
+      const err = new Error('POST not found');
+      err.statusCode = 404;
+      throw err;
+    }
   }
 });
 router.post('/:id', (req, res) => {
@@ -59,7 +75,7 @@ router.post('/:id', (req, res) => {
         content: req.query.content,
       };
       POST[arrIndex] = modifyPost;
-      res.send('수정이 완료되었습니다');
+      res.redirect('/post');
     } else {
       const err = new Error('POST not found');
       err.statusCode = 404;
@@ -76,7 +92,7 @@ router.delete('/:id', (req, res) => {
   const arrIndex = POST.findIndex((post) => post.id === req.params.id);
   if (arrIndex !== -1) {
     POST.splice(arrIndex, 1);
-    res.send('삭제 완료되었습니다.');
+    res.send('삭제 완료');
   } else {
     const err = new Error('POST not found');
     err.statusCode = 404;

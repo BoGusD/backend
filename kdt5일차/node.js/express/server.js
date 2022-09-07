@@ -2,25 +2,31 @@
 
 const express = require('express');
 
+const bodyParser = require('body-parser');
+
 const app = express();
 const PORT = 4000;
 
-const userRouter = require('./routes/users');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-const postsRouter = express.Router();
+const router = require('./routes/index');
+const userRouter = require('./routes/users');
+const postRouter = require('./routes/post');
 
 // view engine 세팅
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+app.use('/', router);
 app.use('/users', userRouter);
-app.use('/posts', postsRouter);
+app.use('/post', postRouter);
 
 app.use(express.static('public'));
 
 app.use((err, req, res, next) => {
   console.log(err.stack);
-  res.status(err.statusCode);
+  res.status(err.statusCode || 500);
   res.end(err.message);
 });
 
