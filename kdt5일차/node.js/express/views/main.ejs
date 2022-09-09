@@ -39,7 +39,9 @@
       </p>
       <p>content: <%= POST[i].content %>
       </p>
-      <a href="#" onclick="deletePost('<%= POST[i].id %>');">삭제</a>
+      <a href="#" onclick="modifyPost('<%= POST[i].id %>');">수정</a>
+
+
     </li>
     <% } %>
     <% } else  { %>

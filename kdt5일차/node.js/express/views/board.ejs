@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>homework</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <!-- <script src="./js/test.js"></script> -->
+</head>
+
+<body>
+
+
+  <h1>BoGus content</h1>
+  <h2>현재 게시물 수 <%= pageCounts %>
+
+  </h2>
+  <div>
+    <a class="write-btn" href="/write">글쓰기</a>
+  </div>
+
+  <ul class="board">
+    <% if(pageCounts >0) { %>
+    <% for (let i =0; i< pageCounts; i++) { %>}
+    <li>
+      <div class="page">
+        <p>title</p>
+        <div class="title">
+          <%= Board[i].title %>
+        </div>
+        <p>content</p>
+        <div class="content">
+          <%= Board[i].content %>
+        </div>
+        <div>
+          <a class="modify-btn" href="/modify">수정</a>
+        </div>
+        <div>
+          <a class="delete-btn" href="/board" onclick="deleteBoard('<%= Board[i].title %>');">삭제</a>
+        </div>
+      </div>
+    </li>
+
+    <% } %>
+    <% } else  { %>
+    <li>
+      해당 게시물을 찾을수가 없습니다.
+    </li>
+    <% } %>
+  </ul>
+  <!-- <img src="./images/<%= imageName %>" alt="book" class="book" /> -->
+</body>
+<script>
+  function deleteBoard(title) {
+    fetch(`http://localhost:4000/board/${title}`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    }).then((res) => {
+      console.log(res);
+      location.reload();
+    })
+  }
+</script>
+
+</html>

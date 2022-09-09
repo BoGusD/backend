@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <div class="inner"> 새로운 게시글 작성
+    <form action="/board" method="post" class="board_form">
+      <div>
+        <div class="title">
+          <label>title</label>
+          <input type="text" name="title" class="title_text" />
+        </div>
+        <div class="content">
+          <label>content</label>
+          <input type="textarea" name="content" class="content_text" />
+
+        </div>
+        <button type="submit" class="submit-btn">제출</button>
+    </form>
+  </div>
+</body>
+
+</html>

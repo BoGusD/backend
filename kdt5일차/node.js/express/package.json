@@ -2,7 +2,7 @@
   "name": "express",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "board.js",
   "scripts": {
     "server": "nodemon server.js",
     "start": "nodemon --watch \"./routes/*.js\" --exec \"npm run server\""

@@ -13,6 +13,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const router = require('./routes/index');
 const userRouter = require('./routes/users');
 const postRouter = require('./routes/post');
+const boardRouter = require('./routes/board');
+const writeRouter = require('./routes/write');
+const modifyRouter = require('./routes/modify');
 
 // view engine 세팅
 app.set('view engine', 'ejs');
@@ -21,6 +24,9 @@ app.set('views', 'views');
 app.use('/', router);
 app.use('/users', userRouter);
 app.use('/post', postRouter);
+app.use('/board', boardRouter.router);
+app.use('/write', writeRouter);
+app.use('/modify', modifyRouter);
 
 app.use(express.static('public'));
 
