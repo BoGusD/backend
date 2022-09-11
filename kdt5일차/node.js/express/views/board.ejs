@@ -35,7 +35,7 @@
           <%= Board[i].content %>
         </div>
         <div>
-          <a class="modify-btn" href="/modify">수정</a>
+          <a class="modify-btn" href="/modify/<%= Board[i].title %>">수정</a>
         </div>
         <div>
           <a class="delete-btn" href="/board" onclick="deleteBoard('<%= Board[i].title %>');">삭제</a>

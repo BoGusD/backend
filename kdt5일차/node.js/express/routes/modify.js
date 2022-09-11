@@ -9,9 +9,10 @@ const reqBoard = require('./board');
 const Board = reqBoard.Board;
 
 router.get('/', (req, res) => {
+  const BoardData = Board.find((board) => board.title === req.body.title);
   const BoardLen = Board.length;
   res.render('modify', {
-    Board,
+    BoardData,
     pageCounts: BoardLen,
     imageName: 'image2.png',
   });

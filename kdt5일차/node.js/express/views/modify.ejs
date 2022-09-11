@@ -14,11 +14,11 @@
     <form action="/modify" method="post" class="board_form">
       <div class="title">
         <label>title</label>
-        <input type="text" name="title" class="title_text"> </input>
+        <input type="text" name="title" class="title_text" value="<% BoardData.title %>"> </input>
       </div>
       <div class="content">
         <label>content</label>
-        <input type="textarea" name="content" class="content_text"> </input>
+        <input type="textarea" name="content" class="content_text" value="<%= BoardData.content %>"> </input>
       </div>
       <button type="submit" class="submit-btn">글 수정하기</button>
 
