@@ -17,6 +17,9 @@ const boardRouter = require('./routes/board');
 const writeRouter = require('./routes/write');
 const modifyRouter = require('./routes/modify');
 
+// review
+const reviewRouter = require('./routes/review');
+
 // view engine 세팅
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -27,6 +30,9 @@ app.use('/post', postRouter);
 app.use('/board', boardRouter.router);
 app.use('/write', writeRouter);
 app.use('/modify', modifyRouter);
+
+// review
+app.use('/review', reviewRouter);
 
 app.use(express.static('public'));
 
