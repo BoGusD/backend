@@ -4,11 +4,14 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
+const cookieParser = require('cookie-parser');
+
 const app = express();
 const PORT = 4000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 const router = require('./routes/index');
 const userRouter = require('./routes/users');
@@ -16,6 +19,8 @@ const postRouter = require('./routes/post');
 const boardRouter = require('./routes/board');
 const writeRouter = require('./routes/write');
 const modifyRouter = require('./routes/modify');
+const registerRouter = require('./routes/register');
+const loginRouter = require('./routes/login');
 
 // review
 const reviewRouter = require('./routes/review');
@@ -30,6 +35,8 @@ app.use('/post', postRouter);
 app.use('/board', boardRouter.router);
 app.use('/write', writeRouter);
 app.use('/modify', modifyRouter);
+app.use('/register', registerRouter);
+app.use('/login', loginRouter);
 
 // review
 app.use('/review', reviewRouter);
