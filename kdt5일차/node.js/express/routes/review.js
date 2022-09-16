@@ -7,11 +7,13 @@ const router = express.Router();
 const mongoClient = require('./mongo');
 
 function isLogin(req, res, next) {
-  if (req.session.login) {
+  if (req.session.login || req.user) {
     next();
   } else {
     res.status(300);
-    res.send('로그인 실패.!<br><a href="/login">회원가입 페이지로 이동</a>');
+    res.send(
+      '로그인이 필요한 서비스 입니다.<br><a href="/login">로그인 페이지로 이동</a>'
+    );
   }
 }
 
@@ -24,7 +26,7 @@ router.get('/', isLogin, async (req, res) => {
   res.render('review', {
     ARTICLE,
     articleCounts: articlelen,
-    userId: req.session.userId,
+    userId: req.session.userId ? req.session.userId : req.user.id,
   });
 });
 // MongoClient.connect(uri, (err, db) => {
@@ -41,14 +43,19 @@ router.get('/', isLogin, async (req, res) => {
 // html을 보여줄 때
 //   res.write('<h1>Welcome</h1>');
 
-router.get('/write', isLogin, (req, res) => {
+// router.get('/write', isLogin, (req, res) => {
+//   res.render('review_write');
+//   // 글 쓰기 모드로 이동
+// });
+
+router.get('/write', (req, res) => {
   res.render('review_write');
-  // 글 쓰기 모드로 이동
 });
 
 router.post('/write', isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newArticle = {
+      id: req.session.userId,
       title: req.body.title,
       content: req.body.content,
     };

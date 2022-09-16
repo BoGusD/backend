@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tetz borad</title>
+  <title>Tetz borad!!!!!!!!!!!!!!!!!!!!</title>
   <style>
     * {
       margin: 0;
@@ -125,11 +125,14 @@
           <% if (articleCounts> 0) { %> <% for(let i=0; i < articleCounts;
             i++) { %>
           <li>
+            <div class="title"> 작성자:<%= ARTICLE[i].id %></div>
             <div class="title"><%= ARTICLE[i].title %></div>
             <div class="content"><%= ARTICLE[i].content %></div>
             <div class="foot">
+              <% if (ARTICLE[i].id === userId) {%>
               <a class="btn orange" href="review/modify/<%= ARTICLE[i].title %>">수정</a>
-              <a class="btn blue" href="#" onclick="deleteArticle('<%= ARTICLE[i].title %>')">삭제</a>
+              <a class="btn blue" href="review/" onclick="deleteArticle('<%= ARTICLE[i].title %>')">삭제</a>
+              <% }%>
             </div>
           </li>
           <% } %> <% } else { %>
