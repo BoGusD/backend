@@ -6,12 +6,24 @@ const bodyParser = require('body-parser');
 
 const cookieParser = require('cookie-parser');
 
+const session = require('express-session');
+
 const app = express();
 const PORT = 4000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(
+  session({
+    secret: 'BoGus',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60,
+    },
+  })
+);
 
 const router = require('./routes/index');
 const userRouter = require('./routes/users');

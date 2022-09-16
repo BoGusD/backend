@@ -4,42 +4,49 @@ const express = require('express');
 
 const router = express.Router();
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-
-const uri =
-  'mongodb+srv://bogus:1234@cluster0.ghdzd.mongodb.net/?retryWrites=true&w=majority';
-
 const mongoClient = require('./mongo');
 
+function isLogin(req, res, next) {
+  if (req.session.login) {
+    next();
+  } else {
+    res.status(300);
+    res.send('로그인 실패.!<br><a href="/login">회원가입 페이지로 이동</a>');
+  }
+}
+
 // '/' ='localhost:4000/board/'
-router.get('/', async (req, res) => {
+router.get('/', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const ARTICLE = await cursor.find({}).toArray();
   const articlelen = ARTICLE.length;
-  res.render('review', { ARTICLE, articleCounts: articlelen });
-
-  // MongoClient.connect(uri, (err, db) => {
-  //   const data = db.db('kdt1').collection('review');
-
-  //   data.find({}).toArray((err, result) => {
-  //     const ARTICLE = result;
-  //     const articlelen = ARTICLE.length;
-  //     res.render('review', { ARTICLE, articleCounts: articlelen });
-  //   });
-  // });
-
-  // 글 전체 목록 보여주기
-  // html을 보여줄 때
-  //   res.write('<h1>Welcome</h1>');
+  res.render('review', {
+    ARTICLE,
+    articleCounts: articlelen,
+    userId: req.session.userId,
+  });
 });
+// MongoClient.connect(uri, (err, db) => {
+//   const data = db.db('kdt1').collection('review');
 
-router.get('/write', (req, res) => {
+//   data.find({}).toArray((err, result) => {
+//     const ARTICLE = result;
+//     const articlelen = ARTICLE.length;
+//     res.render('review', { ARTICLE, articleCounts: articlelen });
+//   });
+// });
+
+// 글 전체 목록 보여주기
+// html을 보여줄 때
+//   res.write('<h1>Welcome</h1>');
+
+router.get('/write', isLogin, (req, res) => {
   res.render('review_write');
   // 글 쓰기 모드로 이동
 });
 
-router.post('/write', async (req, res) => {
+router.post('/write', isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newArticle = {
       title: req.body.title,
@@ -64,7 +71,7 @@ router.post('/write', async (req, res) => {
     throw err;
   }
 });
-router.get('/modify/:title', async (req, res) => {
+router.get('/modify/:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const selectedArticle = await cursor.findOne({ title: req.params.title });
@@ -85,7 +92,7 @@ router.get('/modify/:title', async (req, res) => {
 // });
 // 글 수정 모드로 이동
 
-router.post('/modify/:title', async (req, res) => {
+router.post('/modify/:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   await cursor.updateOne(
@@ -124,7 +131,7 @@ router.post('/modify/:title', async (req, res) => {
 
 // 글 수정 기능 수행
 
-router.delete('/delete/:title', async (req, res) => {
+router.delete('/delete/:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const result = await cursor.deleteOne({ title: req.params.title });
