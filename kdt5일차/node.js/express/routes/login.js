@@ -2,7 +2,6 @@
 
 const express = require('express');
 const passport = require('passport');
-const mongoClient = require('./mongo');
 
 const router = express.Router();
 
@@ -19,16 +18,25 @@ router.post('/', async (req, res, next) => {
       );
     }
     req.logIn(user, (err) => {
-      if (err) throw err;
+      if (err) next(err);
       res.redirect('/review');
     });
   })(req, res, next);
 });
 
-router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) throw err;
-    res.redirect('/');
+router.get('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    return res.redirect('/');
   });
 });
+
+// router.get('/logout', (req, res) => {
+//   req.session.destroy((err) => {
+//     if (err) next(err);
+//     res.redirect('/');
+//   });
+// });
 module.exports = router;

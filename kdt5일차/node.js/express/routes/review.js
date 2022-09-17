@@ -49,7 +49,7 @@ router.get('/', isLogin, async (req, res) => {
 // });
 
 router.get('/write', (req, res) => {
-  res.render('review_write');
+  res.render('review/write');
 });
 
 router.post('/write', isLogin, async (req, res) => {
