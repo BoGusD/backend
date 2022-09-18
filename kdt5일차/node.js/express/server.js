@@ -45,7 +45,7 @@ passport.use(
     },
     async (id, password, cb) => {
       const client = await mongoClient.connect();
-      const userCursor = client.db('kdt1').collection('review');
+      const userCursor = client.db('kdt1').collection('users');
       const idResult = await userCursor.findOne({ id });
       if (idResult !== null) {
         if (idResult.password === password) {
@@ -66,7 +66,7 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser(async (id, cb) => {
   const client = await mongoClient.connect();
-  const userCursor = client.db('kdt1').collection('review');
+  const userCursor = client.db('kdt1').collection('users');
   // id >> id:id
   const result = await userCursor.findOne({ id });
   if (result !== null) cb(null, result);

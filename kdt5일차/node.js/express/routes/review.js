@@ -31,7 +31,7 @@ router.get('/', isLogin, async (req, res) => {
 });
 
 router.get('/write', (req, res) => {
-  res.render('/review_write');
+  res.render('review_write');
 });
 
 router.post('/write', isLogin, async (req, res) => {
@@ -45,7 +45,7 @@ router.post('/write', isLogin, async (req, res) => {
     const client = await mongoClient.connect();
     const cursor = client.db('kdt1').collection('review');
     await cursor.insertOne(newArticle);
-    res.redirect('/review');
+    res.redirect('review');
 
     // MongoClient.connect(uri, (err, db) => {
     //   const data = db.db('kdt1').collection('review');
@@ -60,7 +60,7 @@ router.post('/write', isLogin, async (req, res) => {
     throw err;
   }
 });
-router.get('/modify/title/:title', isLogin, async (req, res) => {
+router.get('/modify/title:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const selectedArticle = await cursor.findOne({ title: req.params.title });
@@ -81,17 +81,17 @@ router.get('/modify/title/:title', isLogin, async (req, res) => {
 // });
 // 글 수정 모드로 이동
 
-router.post('/modify/title/:title', isLogin, async (req, res) => {
+router.post('/modify/title:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   await cursor.updateOne(
     { title: req.params.title },
     { $set: { title: req.body.title, content: req.body.content } }
   );
-  res.redirect('/review');
+  res.redirect('review');
 });
 
-router.delete('/delete/title/:title', isLogin, async (req, res) => {
+router.delete('/delete/title:title', isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const result = await cursor.deleteOne({ title: req.params.title });

@@ -19,7 +19,7 @@ router.post('/', (req, res, next) => {
         `${info.message}<br><a href="/login">로그인 페이지로 이동</a>`
       );
     }
-    req.logIn(user, (err) => {
+    req.login(user, (err) => {
       if (err) next(err);
       res.redirect('/review');
     });
