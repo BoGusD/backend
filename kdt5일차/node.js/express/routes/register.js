@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
   const client = await mongoClient.connect();
-  const userCursor = client.db('kdt1').collection('users');
+  const userCursor = client.db('kdt1').collection('review');
   const duplicated = await userCursor.findOne({ id: req.body.id });
 
   if (duplicated === null) {
