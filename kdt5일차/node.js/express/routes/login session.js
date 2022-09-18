@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
   const client = await mongoClient.connect();
-  const userCursor = client.db('kdt1').collection('review');
+  const userCursor = client.db('kdt1').collection('users');
   const idResult = await userCursor.findOne({
     id: req.body.id,
   });
