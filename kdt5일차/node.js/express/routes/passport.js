@@ -80,8 +80,8 @@ module.exports = () => {
           const newKakaoUser = {
             id: profile.id,
             name:
-              profile.nickName !== undefined
-                ? profile.nickName
+              profile.displayName !== undefined
+                ? profile.displayName
                 : profile.emails[0].value,
 
             provider: profile.provider,
