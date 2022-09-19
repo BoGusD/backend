@@ -44,9 +44,9 @@ const router = require('./routes/index');
 // const modifyRouter = require('./routes/modify');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
-const localStrategy = require('./routes/localStrategy');
+const passportRouter = require('./routes/passport');
 
-localStrategy();
+passportRouter();
 
 // review
 const reviewRouter = require('./routes/review');

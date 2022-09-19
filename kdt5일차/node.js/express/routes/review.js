@@ -34,6 +34,7 @@ router.post('/write', login.isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newArticle = {
       id: req.session.userId ? req.session.userId : req.user.id,
+      userName: req.user?.name ? req.user.name : req.user?.id,
       title: req.body.title,
       content: req.body.content,
     };
@@ -78,6 +79,7 @@ router.get('/modify/title/:title', login.isLogin, async (req, res) => {
 // 글 수정 모드로 이동
 
 router.post('/modify/title/:title', login.isLogin, async (req, res) => {
+  console.log(req.user);
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   await cursor.updateOne(
