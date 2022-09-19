@@ -6,28 +6,23 @@ const router = express.Router();
 
 const mongoClient = require('./mongo');
 
-function isLogin(req, res, next) {
-  if (req.session.login || req.user) {
-    next();
-  } else {
-    res.status(300);
-    res.send(
-      '로그인이 필요한 서비스 입니다.<br><a href="/login">로그인 페이지로 이동</a>'
-    );
-  }
-}
+const login = require('./login');
 
 // '/' ='localhost:4000/board/'
-router.get('/', isLogin, async (req, res) => {
+router.get('/', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const ARTICLE = await cursor.find({}).toArray();
 
-  const articlelen = ARTICLE.length;
+  const articleLen = ARTICLE.length;
   res.render('review', {
     ARTICLE,
-    articleCounts: articlelen,
-    userId: req.session.userId ? req.session.userId : req.user.id,
+    articleCounts: articleLen,
+    userId: req.session.userId
+      ? req.session.userId
+      : req.user?.id
+      ? req.user?.id
+      : req.signedCookies.user,
   });
 });
 
@@ -35,10 +30,10 @@ router.get('/write', (req, res) => {
   res.render('review_write');
 });
 
-router.post('/write', isLogin, async (req, res) => {
+router.post('/write', login.isLogin, async (req, res) => {
   if (req.body.title && req.body.content) {
     const newArticle = {
-      id: req.session.userId,
+      id: req.session.userId ? req.session.userId : req.user.id,
       title: req.body.title,
       content: req.body.content,
     };
@@ -61,7 +56,7 @@ router.post('/write', isLogin, async (req, res) => {
     throw err;
   }
 });
-router.get('/modify/title/:title', isLogin, async (req, res) => {
+router.get('/modify/title/:title', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const selectedArticle = await cursor.findOne({ title: req.params.title });
@@ -82,7 +77,7 @@ router.get('/modify/title/:title', isLogin, async (req, res) => {
 // });
 // 글 수정 모드로 이동
 
-router.post('/modify/title/:title', isLogin, async (req, res) => {
+router.post('/modify/title/:title', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   await cursor.updateOne(
@@ -92,7 +87,7 @@ router.post('/modify/title/:title', isLogin, async (req, res) => {
   res.redirect('/review');
 });
 
-router.delete('/delete/title/:title', isLogin, async (req, res) => {
+router.delete('/delete/title/:title', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
   const cursor = client.db('kdt1').collection('review');
   const result = await cursor.deleteOne({ title: req.params.title });

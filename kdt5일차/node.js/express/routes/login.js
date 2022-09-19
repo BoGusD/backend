@@ -7,6 +7,17 @@ const mongoClient = require('./mongo');
 
 const router = express.Router();
 
+const isLogin = (req, res, next) => {
+  if (req.session.login || req.user || req.signedCookies.user) {
+    next();
+  } else {
+    res.status(300);
+    res.send(
+      '로그인이 필요한 서비스 입니다.<br><a href="/login">로그인 페이지로 이동</a>'
+    );
+  }
+};
+
 router.get('/', (req, res) => {
   res.render('login');
 });
@@ -21,6 +32,11 @@ router.post('/', (req, res, next) => {
     }
     req.login(user, (err) => {
       if (err) next(err);
+      res.cookie('user', req.body.id, {
+        expires: new Date(Date.now() + 1000 * 60),
+        httpOnly: true,
+        signed: true,
+      });
       res.redirect('/review');
     });
   })(req, res, next);
@@ -66,4 +82,4 @@ router.get('/logout', (req, res, next) => {
 //   });
 // });
 
-module.exports = router;
+module.exports = { router, isLogin };
