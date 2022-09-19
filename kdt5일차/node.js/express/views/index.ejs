@@ -41,7 +41,7 @@
     <h2 class="mt-5 text-center"><a href="/login">로그인 바로가기</a></h2>
     <h2 class="mt-5 text-center"><a href="/review">게시판 바로가기</a></h2>
     <h2 class="mt-5 text-center"><a href="/login/auth/naver">네이버 로그인</a></h2>
-    <h2 class="mt-5 text-center"><a href="javascript:kakaoLogin();">카카오 로그인</a></h2>
+    <h2 class="mt-5 text-center"><a href="/login/auth/kakao">카카오 로그인</a></h2>
   </div>
 
   <script>
@@ -65,24 +65,24 @@
       myModal.hide()
     }
 
-    window.Kakao.init("f538f4bb75ecbfa7071701a0ebdf1ef1")
+    // window.Kakao.init("f538f4bb75ecbfa7071701a0ebdf1ef1")
 
-    function kakaoLogin() {
-      window.Kakao.Auth.login({
-        scope: 'profile_nickname, account_email, gender',
-        success: function(authObj) {
-          console.log(authObj);
-          window.Kakao.API.request({
-            url: '/v2/user/me',
-            success: res => {
-              const kakao_account = res.kakao_account;
-              console.log(kakao_account);
-            }
-          })
+    // function kakaoLogin() {
+    //   window.Kakao.Auth.login({
+    //     scope: 'profile_nickname, account_email, gender',
+    //     success: function(authObj) {
+    //       console.log(authObj);
+    //       window.Kakao.API.request({
+    //         url: '/v2/user/me',
+    //         success: res => {
+    //           const kakao_account = res.kakao_account;
+    //           console.log(kakao_account);
+    //         }
+    //       })
 
-        }
-      })
-    }
+    //     }
+    //   })
+    // }
   </script>
 </body>
 
