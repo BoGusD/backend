@@ -46,6 +46,7 @@ const router = require('./routes/index');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 const passportRouter = require('./routes/passport');
+const chatRouter = require('./routes/chat');
 
 passportRouter();
 
@@ -62,9 +63,9 @@ app.use('/', router);
 // app.use('/board', boardRouter.router);
 // app.use('/write', writeRouter);
 // app.use('/modify', modifyRouter);
-app.use('/register', registerRouter);
+app.use('/register', registerRouter.router);
 app.use('/login', loginRouter.router);
-
+app.use('/chat', chatRouter);
 // review
 app.use('/review', reviewRouter);
 

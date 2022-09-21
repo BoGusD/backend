@@ -4,6 +4,8 @@ const NaverStrategy = require('passport-naver').Strategy;
 const KakaoStrategy = require('passport-kakao').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+const verifyModule = require('./register').verfiyPassword;
+
 const mongoClient = require('./mongo');
 
 module.exports = () => {
@@ -18,7 +20,19 @@ module.exports = () => {
         const userCursor = client.db('kdt1').collection('users');
         const idResult = await userCursor.findOne({ id });
         if (idResult !== null) {
-          if (idResult.password === password) {
+          // 아틀라스 사용 변수 제거
+          if (idResult.salt !== undefined) {
+            const passwordresult = verifyModule(
+              password,
+              idResult.salt,
+              idResult.password
+            );
+            if (passwordresult) {
+              cb(null, idResult);
+            } else {
+              cb(null, false, { message: '비밀번호가 틀렸습니다.' });
+            }
+          } else if (idResult.password === password) {
             cb(null, idResult);
           } else {
             cb(null, false, { message: '비밀번호가 틀렸습니다.' });
