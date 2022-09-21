@@ -2,11 +2,31 @@
 
 const express = require('express');
 
+const multer = require('multer');
+
 const router = express.Router();
+
+const fs = require('fs');
 
 const mongoClient = require('./mongo');
 
 const login = require('./login');
+
+const dir = 'uploads';
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '_' + Date.now());
+  },
+});
+
+const limits = {
+  fileSize: 1024 * 1024 * 2,
+};
+
+const upload = multer({ storage, limits });
 
 // '/' ='localhost:4000/board/'
 router.get('/', login.isLogin, async (req, res) => {
@@ -30,13 +50,17 @@ router.get('/write', (req, res) => {
   res.render('review_write');
 });
 
-router.post('/write', login.isLogin, async (req, res) => {
+router.post('/write', login.isLogin, upload.single('img'), async (req, res) => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+
+  console.log(req.file);
   if (req.body.title && req.body.content) {
     const newArticle = {
       id: req.session.userId ? req.session.userId : req.user.id,
       userName: req.user?.name ? req.user.name : req.user?.id,
       title: req.body.title,
       content: req.body.content,
+      img: req.file ? req.file.filename : null,
     };
 
     const client = await mongoClient.connect();

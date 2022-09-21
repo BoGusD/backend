@@ -2,6 +2,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const NaverStrategy = require('passport-naver').Strategy;
 const KakaoStrategy = require('passport-kakao').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 const mongoClient = require('./mongo');
 
 module.exports = () => {
@@ -91,6 +93,39 @@ module.exports = () => {
             cb(null, newKakaoUser);
           } else {
             cb(null, false, { message: '회원 생성 오류' });
+          }
+        }
+      }
+    )
+  );
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CB_URL,
+      },
+      async (accessToken, refreshToken, profile, cb) => {
+        const client = await mongoClient.connect();
+        const userCursor = client.db('kdt1').collection('users');
+        const result = await userCursor.findOne({ id: profile.id });
+
+        if (result !== null) {
+          cb(null, result);
+        } else {
+          const newGoogleUser = {
+            id: profile.id,
+            name:
+              profile.displayName !== undefined
+                ? profile.displayName
+                : profile.emails[0].value,
+            provider: profile.provider,
+          };
+          const dbResult = await userCursor.insertOne(newGoogleUser);
+          if (dbResult.acknowledged) {
+            cb(null, newGoogleUser);
+          } else {
+            cb(null, false, { message: '회원 생성 에러' });
           }
         }
       }
