@@ -20,7 +20,24 @@ const multer = require("multer");
 // FileSystem의 약자로, 파일 처리와 관련된 여러가지 기능을 하는 js라이브러리
 const fs = require("fs");
 
+// 몽구스를 통한 mongodb 연결
+const mongoose = require("mongoose");
+require("dotenv").config({ path: ".env" });
 
+mongoose.connect(
+  process.env.MongoDB_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Connected to Database success");
+    }
+  }
+);
 
 //router
 dotenv.config();
