@@ -20,6 +20,8 @@ const multer = require("multer");
 // FileSystem의 약자로, 파일 처리와 관련된 여러가지 기능을 하는 js라이브러리
 const fs = require("fs");
 
+
+
 //router
 dotenv.config();
 const app = express();
